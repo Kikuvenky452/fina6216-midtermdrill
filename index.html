@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FINA6216 Midterm Drill</title>
+<style>
+:root{
+  --paper:#F4F5F8; --sheet:#FFFFFF; --ink:#1B2130; --muted:#5F6878; --faint:#8B94A3;
+  --rule:#D8DCE3; --rule-soft:#ECEEF2;
+  --head-red:#A5322C; --tbl-purple:#5A3E95;
+  --sol:#1E6B4E; --sol-ink:#155A40; --sol-soft:#E7F2EC; --sol-rule:#BFDCCB;
+  --btn-ink:#FFFFFF; --focus:#2B5FD9;
+  --serif:Georgia,"Times New Roman",serif;
+  --sans:"Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111419; --sheet:#1A1E26; --ink:#E7EAF0; --muted:#9AA3B2; --faint:#6F7886;
+    --rule:#2D333D; --rule-soft:#232830;
+    --head-red:#E27670; --tbl-purple:#B39BE6;
+    --sol:#4DB283; --sol-ink:#7FD1A9; --sol-soft:#152820; --sol-rule:#27503D;
+    --btn-ink:#0F1A14; --focus:#7FA3F5;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111419; --sheet:#1A1E26; --ink:#E7EAF0; --muted:#9AA3B2; --faint:#6F7886;
+  --rule:#2D333D; --rule-soft:#232830;
+  --head-red:#E27670; --tbl-purple:#B39BE6;
+  --sol:#4DB283; --sol-ink:#7FD1A9; --sol-soft:#152820; --sol-rule:#27503D;
+  --btn-ink:#0F1A14; --focus:#7FA3F5;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer}
+button:focus-visible,summary:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.wrap{max-width:760px;margin:0 auto;padding:28px 20px 72px}
+
+header{display:flex;flex-direction:column;gap:14px;margin-bottom:22px}
+.eyebrow{font-family:var(--sans);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--serif);font-weight:600;font-size:30px;line-height:1.15;margin:0;text-wrap:balance}
+.picker-row{display:flex;align-items:flex-start;gap:12px}
+.picker-label{font-family:var(--sans);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);flex:0 0 58px;padding-top:8px}
+.topics{display:flex;flex-wrap:wrap;gap:8px}
+.chip.sub{font-size:12px;padding:5px 10px}
+.chip{font-family:var(--sans);font-size:13px;font-weight:500;padding:6px 12px;border-radius:999px;border:1px solid var(--rule);background:transparent;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+
+.sheet{background:var(--sheet);border:1px solid var(--rule);padding:30px 34px 28px}
+.sheet-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--rule-soft)}
+.section{font-family:var(--serif);font-weight:700;color:var(--head-red);text-decoration:underline;text-underline-offset:3px;font-size:17px}
+.pnum{font-family:var(--sans);font-size:12px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.problem p{margin:0 0 14px;max-width:64ch}
+.problem p:last-child{margin-bottom:0}
+.problem ul{margin:0 0 14px 6px;padding-left:20px}
+.problem li{margin:2px 0}
+.dash{margin-left:6px}
+.blank{display:inline-block;min-width:64px;border-bottom:1px solid var(--ink);vertical-align:baseline}
+
+table{border-collapse:collapse;font-family:var(--mono);font-size:14px;font-variant-numeric:tabular-nums}
+.tbl-wrap{overflow-x:auto;margin:6px 0 16px}
+.asset th,.asset td{padding:3px 22px 3px 0;text-align:left}
+.asset th{font-weight:400;border-bottom:1px solid var(--ink)}
+.flow{min-width:420px}
+.flow th{font-weight:400;text-align:center;padding:6px 14px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.flow td{text-align:center;padding:5px 14px}
+.flow tr:last-child td{border-bottom:1px solid var(--ink)}
+.flow .tr{font-weight:500}
+
+.rules{margin:0 0 18px;border:1px solid var(--rule-soft);padding:10px 14px;font-size:15px}
+.rules summary{font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;color:var(--muted)}
+.rules ul{padding-left:20px;margin:8px 0 6px}
+.rules li{margin:4px 0}
+
+.lob{border:2px solid var(--ink);padding:14px 18px 16px;margin:14px 0 4px}
+.lob-title{font-family:var(--serif);font-weight:700;color:var(--tbl-purple);font-size:15px;margin:0 0 6px}
+.book{width:100%;max-width:560px;margin:0 auto 12px}
+.book th{font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:4px 8px;text-align:center;font-family:var(--serif);font-size:15px}
+.book td{padding:4px 8px;text-align:center;vertical-align:top;white-space:pre-line;line-height:1.5}
+.book td.q{text-align:center}
+.book tr td{height:30px}
+.quote{margin:8px auto 14px;border:1px solid var(--ink);min-width:300px}
+.quote th{color:var(--head-red);font-weight:700;padding:5px 18px;font-family:var(--serif);font-size:15px}
+.quote td{padding:4px 18px;text-align:center}
+.quote td:first-child{text-align:left;font-family:var(--serif);font-size:15px}
+.tape{border:1px solid var(--ink);width:100%}
+.tape th{font-weight:400;padding:6px 10px;border-bottom:1px solid var(--ink);font-family:var(--serif);font-size:15px}
+.tape td{padding:5px 10px;text-align:center;height:30px}
+.tape tbody tr.taperow+tr.taperow td{border-top:1px solid var(--rule-soft)}
+.walk{margin:4px 0 0;padding-left:22px;font-size:15px}
+.walk li{margin:5px 0}
+.walk .t{font-family:var(--mono);font-size:13px}
+.recon{font-size:15px;margin:12px 0 0;max-width:70ch}
+
+.actions{display:flex;gap:10px;margin:18px 0 0;flex-wrap:wrap;align-items:center}
+.btn{font-family:var(--sans);font-weight:600;font-size:14px;padding:10px 18px;border-radius:6px;border:1px solid transparent}
+.btn-sol{background:var(--sol);color:var(--btn-ink);border-color:var(--sol)}
+.btn-next{background:transparent;color:var(--ink);border-color:var(--rule)}
+.btn-next:hover{border-color:var(--ink)}
+.count{font-family:var(--sans);font-size:13px;color:var(--faint);margin-left:auto}
+
+.solution{margin-top:18px;background:var(--sol-soft);border:1px solid var(--sol-rule);border-left:4px solid var(--sol);padding:22px 28px 24px}
+.solution .stitle{font-family:var(--serif);font-weight:700;text-decoration:underline;text-underline-offset:3px;margin:0 0 12px;font-size:17px}
+.solution .sub{font-family:var(--serif);font-weight:700;margin:14px 0 6px}
+.solution p{margin:0 0 10px;max-width:66ch}
+.calc{font-family:var(--mono);font-size:14px;line-height:1.7;margin:4px 0 12px 22px;white-space:pre-wrap;font-variant-numeric:tabular-nums}
+.calc.flush{margin-left:0}
+.final{font-weight:700}
+.hr{border:0;border-top:1px dashed var(--rule);margin:8px 0}
+
+.about{margin-top:26px;font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.55}
+.about summary{cursor:pointer;font-weight:600}
+.about ul{padding-left:18px;margin:8px 0}
+.about li{margin:3px 0}
+.about code{font-family:var(--mono);font-size:12px}
+@media (max-width:560px){.sheet{padding:22px 18px}.solution{padding:18px 16px}.calc{margin-left:8px}}
+@media (prefers-reduced-motion:no-preference){.solution{animation:rise .25s ease-out}@keyframes rise{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">FINA6216 · Portfolio Theory and Asset Pricing · Midterm</div>
+  <h1>Numerical Problems Drill</h1>
+  <div class="picker-row"><span class="picker-label">Topic</span><div class="topics" id="topics" role="group" aria-label="Topic"></div></div>
+  <div class="picker-row"><span class="picker-label">Problem</span><div class="topics" id="picker" role="group" aria-label="Problem"></div></div>
+</header>
+
+<div class="sheet" id="sheet">
+  <div class="sheet-head"><span class="section" id="secLabel"></span><span class="pnum" id="pnum"></span></div>
+  <div class="problem" id="problem"></div>
+  <div class="actions">
+    <button class="btn btn-sol" id="btnShow">Show solution</button>
+    <button class="btn btn-next" id="btnSimilar">Try a similar problem</button>
+    <button class="btn btn-next" id="btnNext">Next problem</button>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="solution" id="solution" hidden></div>
+</div>
+
+<details class="about">
+  <summary>How this drill works</summary>
+  <p>Every problem is one of the 14 templates in the course handout <em>Numerical Problems and Solutions (Midterm, 2026)</em>. The wording of the problem and of the solution steps is fixed. Only the numbers change, and they are drawn from the whole-number ranges below so the problems can be worked by hand. Solutions are computed by formula, not by an AI model. Pick a topic and, if you want, a specific problem to drill; <em>Try a similar problem</em> keeps the same structure and redraws the numbers. Keyboard: S shows the solution, R tries a similar problem, N loads the next problem.</p>
+  <ul id="rangesList"></ul>
+</details>
+</div>
+
+<script id="engine">
+// ============================================================
+//  ENGINE — problem generators. Wording is fixed; numbers vary
+//  only within RANGES (all whole numbers). Edit RANGES to tune.
+// ============================================================
+var RANGES = {
+  ret:   { shares:[100,200,300,400,500], p0:[20,60], up:[2,10], down:[2,6] },
+  cal:   { rf:[2,7], premium:[4,10], sd:[10,12,15,16,18,20,24,25] },
+  alloc: { rf:[2,7], premium:[4,10], sd:[10,12,15,16,18,20,24,25], y:[20,25,40,50,60,75,80] },
+  util:  { rf:[2,7], er:[8,14], sd:[10,12,15,16,18,20,25] },   // rule: A must come out > 0 (E(r) above the risk-free rate)
+  hedge: { e1:[3,8], gap:[1,4], sd:[10,12,15,16,18,20,24,25,30] },
+  mcall: { shares:[200,300,400,500,600,800,1000], price:[20,100], own:[50,70], rate:[5,9], maint:[25,30,35,40] },
+  mret:  { shares:[100,150,200,250,300,400], price:[20,100], own:[50,70], rate:[5,9], maint:[30,35,40], up:[10,15,20,25,30] },
+  mboth: { shares:[300,400,500,600,800], price:[20,100], own:[50,70], rate:[5,9], maint:[30,35,40], up:[10,15,20,25,30] },
+  lob:   { ladder:[20.15,20.10,20.05,20.00], size:[1,6], names:["ANN","BEN","CAL","DEE","ELI","FLO","GUS","HAL","IVY","JON","KAY","LEE","MAE","NED","OWE","PIA","QIN","RAY","SAM","TAD","UMA","VIC","WES","XIA","YAN","ZOE"] }
+};
+
+var rng = Math.random;
+function rint(a,b){ return a + Math.floor(rng()*(b-a+1)); }
+function pick(arr){ return arr[Math.floor(rng()*arr.length)]; }
+function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){var j=Math.floor(rng()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;} return a; }
+
+// ---- formatting ------------------------------------------------
+function comma(n){ return n.toLocaleString("en-US"); }
+function usd(n,dec){ dec = dec===undefined?0:dec; return "$" + n.toLocaleString("en-US",{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+function pct(x,dec){ dec = dec===undefined?2:dec; return (x*100).toFixed(dec) + "%"; }
+function f2(x){ return x.toFixed(2); }
+function noLead(s){ return s.replace(/^(-?)0\./,"$1."); }         // 0.57 -> .57
+function factor(x){ return noLead(x.toFixed(4)); }                  // 0.9516 -> .9516
+function dec2(x){ return x.toFixed(2); }                            // 0.07
+function trimZeros(s){ return s.indexOf(".")<0?s:s.replace(/0+$/,"").replace(/\.$/,""); }
+function signedJoin(vals){ // [9.52, 17.39, -4.84] -> "9.52 + 17.39 − 4.84"
+  return vals.map(function(v,i){
+    var a = Math.abs(v).toFixed(2);
+    if(i===0) return (v<0?"−":"") + a;
+    return (v<0?" − ":" + ") + a;
+  }).join("");
+}
+
+// ---- Problem 1: Return --------------------------------------------
+function genReturn(){
+  var R = RANGES.ret;
+  var name = pick(["Han","Luke"]);
+  var shares = pick(R.shares);
+  var p0 = rint(R.p0[0],R.p0[1]);
+  var deltas = shuffle([rint(R.up[0],R.up[1]), rint(R.up[0],R.up[1]), rint(R.up[0],R.up[1]), -rint(R.down[0],R.down[1])]);
+  var p=[p0]; for(var i=0;i<4;i++) p.push(p[i]+deltas[i]);
+  var r=[]; for(i=0;i<4;i++) r.push((p[i+1]-p[i])/p[i]);
+  var arith = (r[0]+r[1]+r[2]+r[3])/4;
+  var product = p[4]/p[0];
+  var hpr = product-1;
+  var geo = Math.pow(product,0.25)-1;
+  var factors = r.map(function(x){return factor(1+x);}).join("*");
+  var sumPct = (r[0]+r[1]+r[2]+r[3])*100;
+
+  return {
+    topic:"Return", section:"Return", pnum: name==="Han"?"Problem 1":"Problem 2",
+    problem:[
+      {p:"Suppose "+name+" buys "+shares+" shares of a stock at the beginning of year 1 for "+usd(p[0])+". The stock price at the end of year 1 is "+usd(p[1])+", the price is "+usd(p[2])+" at the end of year 2, the price is "+usd(p[3])+" at the end of year 3, and the price is "+usd(p[4])+" at the end of year 4."},
+      {p:"If the stock pays no dividends, calculate the following during the four-year period:"},
+      {ul:["arithmetic mean return (annual)","cumulative return or holding-period return","geometric mean return (annual)"]}
+    ],
+    solution:[
+      {p:"Calculate the return for each period:"},
+      {calc:[
+        "Year 1: ("+p[1]+"-"+p[0]+")/"+p[0]+"  = "+pct(r[0]),
+        "Year 2: ("+p[2]+"-"+p[1]+")/"+p[1]+"  = "+pct(r[1]),
+        "Year 3: ("+p[3]+"-"+p[2]+")/"+p[2]+"  = "+pct(r[2]),
+        "Year 4: ("+p[4]+"-"+p[3]+")/"+p[3]+"  = "+pct(r[3])
+      ]},
+      {calc:["Arithmetic mean return = ("+signedJoin(r.map(function(x){return x*100;}))+") / 4 = "+sumPct.toFixed(2)+" / 4 = "+pct(arith)], flush:true},
+      {calc:["Product of returns = ("+factors+") = "+product.toFixed(4)], flush:true},
+      {calc:["Cumulative (holding period) return = "+product.toFixed(4)+" – 1 = "+pct(hpr),
+             "Alternately, Cumulative (holding period) return = ("+p[4]+"/"+p[0]+") – 1 = "+pct(hpr)+"."], flush:true},
+      {calc:["Geometric mean return = ("+factors+")^¼ - 1 = "+pct(geo)], flush:true, final:true}
+    ],
+    answer:"Arithmetic "+pct(arith)+" · HPR "+pct(hpr)+" · Geometric "+pct(geo)
+  };
+}
+
+// ---- Portfolio Theory 1: CAL slope -------------------------------
+function genCAL(){
+  var R=RANGES.cal;
+  var rf=rint(R.rf[0],R.rf[1]); var er=rf+rint(R.premium[0],R.premium[1]); var sd=pick(R.sd);
+  var slope=(er-rf)/sd;
+  return {
+    topic:"Portfolio Theory", section:"Portfolio Theory", pnum:"Problem 1",
+    problem:[
+      {p:"Frodo invest $100 in a risky asset with an expected rate of return of "+er+"% and a standard deviation of "+sd+"% and a T-bill with a rate of return of "+rf+"%. The slope of the Capital Allocation Line formed with the risky asset and the risk-free asset is equal to ", blank:true}
+    ],
+    solution:[
+      {p:"The Capital Allocation Line runs from the risk-free asset (the T-bill at "+rf+"%) through the risky asset. To calculate the slope of the CAL, the numerator is E(r) of the risky asset ("+er+"%) minus the risk-free rate ("+rf+"%). The denominator is the standard deviation of the risky asset ("+sd+"%)."},
+      {p:"The resulting slope of Frodo's CAL is ("+er+"% - "+rf+"%) / "+sd+"% = <b>"+f2(slope)+"</b>", html:true}
+    ],
+    answer:"Slope = "+f2(slope)
+  };
+}
+
+// ---- Portfolio Theory 2: allocation to hit target σ --------------
+function genAlloc(){
+  var R=RANGES.alloc;
+  var combos=[];
+  R.sd.forEach(function(sd){ R.y.forEach(function(y){ var t=sd*y/100; if(Number.isInteger(t) && t<sd) combos.push([sd,y,t]); }); });
+  var c=pick(combos); var sd=c[0], y=c[1], target=c[2];
+  var rf=rint(R.rf[0],R.rf[1]); var er=rf+rint(R.premium[0],R.premium[1]);
+  return {
+    topic:"Portfolio Theory", section:"Portfolio Theory", pnum:"Problem 2",
+    problem:[
+      {p:"Legolas invest $100 in a T-bill that pays "+rf+"% and a risky portfolio, P, with an expected return of "+er+"% and a standard deviation of "+sd+"%. If he want to form a portfolio with a standard deviation of "+target+"%, what percentages of his money must be invested in P and the T-bill, respectively?"}
+    ],
+    solution:[
+      {p:"The standard deviation of a portfolio consisting of y% in risky portfolio P and the remaining in the risk-free asset is as follows. Because the T-bill has zero standard deviation, only the risky portfolio contributes risk, so σ = y × σ(P):"},
+      {calc:[target+"% = "+sd+"%*(y)", "Solving:  y = "+target+"% / "+sd+"% = "+y+"%."]},
+      {p:"<b>"+y+"% of Legolas's money must be invested in the risky portfolio, and "+(100-y)+"% in the T-bill.</b> Check: "+dec2(y/100)+" × "+sd+"% = "+target+"%.", html:true}
+    ],
+    answer:y+"% in P, "+(100-y)+"% in T-bill"
+  };
+}
+
+// ---- Portfolio Theory 3: range of A ------------------------------
+function genUtility(){
+  var R=RANGES.util;
+  // Utility in whole-number percent form: U = E(R) – 0.005·A·σ², with E(R) and σ entered as percents.
+  var rf, er, sd, A, guard=0;
+  do{ rf=rint(R.rf[0],R.rf[1]); er=rint(R.er[0],R.er[1]); sd=pick(R.sd); A=(er-rf)/(0.005*sd*sd); }
+  while(!(er-rf>=2 && A>0) && guard++<500);          // rule: A > 0
+  var penalty=0.005*sd*sd;
+  return {
+    topic:"Portfolio Theory", section:"Portfolio Theory", pnum:"Problem 3",
+    problem:[
+      {p:"Consider a portfolio that offers an expected return of "+er+"% and a standard deviation of "+sd+"%. T-bills offer a risk-free "+rf+"% rate of return. Describe the <u>entire</u> range of A for which the risky portfolio is still preferred to bills. You may assume the common form of utility function: U = E(R) – (0.005*A*σ²). Investors are risk averse.", html:true}
+    ],
+    solution:[
+      {p:"The utility of the risk-free rate is "+rf+"%, because T-bills have zero standard deviation, so there is no risk penalty and utility equals the return. Therefore, the utility acceptable with the risky portfolio needs to exceed "+rf+"%."},
+      {p:"To find the A value, we set U="+rf+"%. Then, the equation is as follows:"},
+      {calc:[rf+" = "+er+" – [0.005*A*("+sd+"^2)]  →",
+             "Solve for A  →  A = "+(er-rf)+" / "+trimZeros(penalty.toFixed(5))+" = "+f2(A)]},
+      {p:"At A = "+f2(A)+" the investor is exactly indifferent between the risky portfolio and bills. Any A above "+f2(A)+" makes the risk penalty large enough that the utility of the risky portfolio falls below "+rf+"%, so bills are preferred. Because investors are risk averse, A must also be positive."},
+      {p:"The entire range over which the risky portfolio is still preferred is therefore <b>0 &lt; A &lt; "+f2(A)+"</b>.", html:true}
+    ],
+    answer:"0 < A < "+f2(A)
+  };
+}
+
+// ---- Portfolio Theory 4: risk-free hedge with ρ = −1 -------------
+function genHedge(){
+  var R=RANGES.hedge;
+  var sds=shuffle(R.sd).slice(0,2).sort(function(a,b){return a-b;}); var s1=sds[0], s2=sds[1];
+  var e1=rint(R.e1[0],R.e1[1]); var e2=e1+rint(R.gap[0],R.gap[1]);
+  var w1=s2/(s1+s2); var w1r=Math.round(w1*100)/100; var w2r=Math.round((1-w1r)*100)/100;
+  return {
+    topic:"Portfolio Theory", section:"Portfolio Theory", pnum:"Problem 4",
+    problem:[
+      {p:"The expected return and risk of Asset 1 and Asset 2 are summarized below."},
+      {table:"asset", head:["","E(r)","σ(r)"], rows:[["Risky Asset 1",e1+"%",s1+"%"],["Risky Asset 2",e2+"%",s2+"%"]]},
+      {p:"Let the correlation between the two assets be -1. Calculate the portfolio weights such that Portfolio P, composed of the two assets, is risk free."}
+    ],
+    solution:[
+      {p:"The minimum variance that is possible when two risky assets are perfectly negatively correlated is zero. This happens when the risk contributed by each asset is exactly equal, so the two offset. The standard deviation of the portfolio in this scenario is:"},
+      {p:"Standard Deviation of Asset 1 * w<sub>1</sub> - Standard Deviation of Asset 2 * (1-w<sub>1</sub>) = 0", html:true},
+      {p:"Substituting, where X is the weight in Asset 1:"},
+      {calc:[s1+"*X - "+s2+"*(1-X) = 0", s1+"*X - "+s2+" + "+s2+"X = 0", (s1+s2)+"X = "+s2+".", "Thus, X="+noLead(f2(w1))]},
+      {p:"<b>The weight of Asset 1 is "+noLead(f2(w1r))+". The weight of 2 is "+noLead(f2(w2r))+".</b>", html:true}
+    ],
+    answer:"w1 = "+noLead(f2(w1r))+", w2 = "+noLead(f2(w2r))
+  };
+}
+
+// ---- Margin helpers ------------------------------------------------
+function marginSetup(R){
+  var shares,price,total,own,tries=0;
+  do{
+    shares=pick(R.shares); price=rint(R.price[0]/5,R.price[1]/5)*5; total=shares*price;
+    var f=rint(R.own[0],R.own[1])/100; var step= total<10000?500:1000;
+    own=Math.round(total*f/step)*step; tries++;
+  }while((own<0.5*total || own>=0.75*total) && tries<200);
+  return {shares:shares, price:price, total:total, own:own, loan:total-own, rate:rint(R.rate[0],R.rate[1]), maint:pick(R.maint)};
+}
+function marginCallCalc(m,name){
+  var k=m.shares*m.maint/100; var coef=m.shares-k; var P=m.loan/coef;
+  return {
+    blocks:[
+      {p:"% Margin = (# Shares(Price) – Margin Loan)/# Shares(Price)"},
+      {p:"Margin loan = "+m.shares+"("+usd(m.price)+") - "+usd(m.own)+" = "+usd(m.loan)},
+      {p:"If the margin drops below "+m.maint+"%, then "+name+" will get a margin call. To find at what price this will occur:"},
+      {calc:["("+m.shares+"P – "+comma(m.loan)+") / "+m.shares+"P = "+noLead(dec2(m.maint/100)),
+             m.shares+"P – "+comma(m.loan)+" = "+k+"P",
+             coef+"P = "+comma(m.loan),
+             "P = "+usd(P,2)], final:true}
+    ], P:P
+  };
+}
+// Revised handout format (Sept 2026): step-by-step cash breakdown. `loanLabel` follows the handout
+// ("Margin loan" for Ron, "Margin loan amount" for Hermione); `his` is the handout's pronoun for the name.
+function marginReturnCalc(m,up,name,his,loanLabel){
+  var end=m.total*(1+up/100); var interest=m.loan*m.rate/100; var received=end-m.loan-interest; var gain=received-m.own; var ror=gain/m.own;
+  return {
+    blocks:[
+      {p:(loanLabel||"Margin loan")+" = ["+m.shares+"*"+m.price+"] – "+comma(m.own)+" = "+usd(m.loan)},
+      {p:"Rate of return:"},
+      {calc:[
+        "Position value end of the year = "+m.shares+"*"+m.price+"*"+dec2(1+up/100)+" = "+usd(end),
+        "less:    loan = "+comma(m.loan),
+        "Less:    interest on loan = "+comma(m.loan)+"*"+noLead(dec2(m.rate/100))+" = "+comma(interest),
+        "",
+        "Amount received by "+name+": "+comma(end)+" – "+comma(m.loan)+" – "+comma(interest)+" = "+usd(received),
+        his+" initial investment = "+usd(m.own),
+        name+"'s return = ("+comma(received)+" – "+comma(m.own)+") / "+comma(m.own)+" = "+comma(gain)+" / "+comma(m.own)+" = "+pct(ror)
+      ], final:true}
+    ], ror:ror
+  };
+}
+
+// ---- Margin 1: Harry, margin-call price -----------------------------
+function genMarginCall(){
+  var m=marginSetup(RANGES.mcall); var c=marginCallCalc(m,"Harry");
+  var curMargin=m.own/m.total;
+  var sol=[
+    {p:"% Margin = (# Shares(Price) – Margin Loan)/# Shares(Price)"},
+    {p:"The margin is the equity position in the investment. If you enter a position that is ("+m.shares+" shares *"+usd(m.price)+" each) = "+usd(m.total)+", "+usd(m.own)+" of the investment is your own money, ("+comma(m.own)+"/"+comma(m.total)+")= "+pct(curMargin,1)+" is the current margin."},
+    {p:"Margin loan = "+m.shares+"("+usd(m.price)+") - "+usd(m.own)+" = "+usd(m.loan)},
+    {p:"If the margin drops below "+m.maint+"%, then Harry will get a margin call. To find at what price this will occur:"},
+    {p:"Solve for P:"},
+    c.blocks[3]
+  ];
+  return {
+    topic:"Margin", section:"Margin Problems", pnum:"Problem 1",
+    problem:[
+      {p:"Harry purchases "+m.shares+" shares at "+usd(m.price)+" per share using "+usd(m.own)+" of own money, borrowing the remainder of the purchase price from the prime broker. The rate on the margin loan is "+m.rate+"%. The maintenance margin is "+m.maint+"%."},
+      {p:"How low can the stock price fall today before Harry gets a margin call from the prime broker?"}
+    ],
+    solution:sol, answer:"P = "+usd(c.P,2)
+  };
+}
+
+// ---- Margin 2: Ron, rate of return ----------------------------------
+function genMarginReturn(){
+  var R=RANGES.mret; var m=marginSetup(R); var up=pick(R.up); var c=marginReturnCalc(m,up,"Ron","His","Margin loan");
+  return {
+    topic:"Margin", section:"Margin Problems", pnum:"Problem 2",
+    problem:[
+      {p:"Ron purchases "+m.shares+" shares at "+usd(m.price)+" per share using "+usd(m.own)+" of own money, borrowing the remainder of the purchase price from the prime broker. The rate on the margin loan is "+m.rate+"%. The maintenance margin is "+m.maint+"%."},
+      {p:"What is Ron's rate of return if the price of the stock goes up "+up+"% during the next year? The stock currently pays no dividend."}
+    ],
+    solution:c.blocks, answer:"Rate of return = "+pct(c.ror)
+  };
+}
+
+// ---- Margin 3: Hermione, both parts ---------------------------------
+function genMarginBoth(){
+  var R=RANGES.mboth; var m=marginSetup(R); var up=pick(R.up);
+  var a=marginReturnCalc(m,up,"Hermione","Her","Margin loan amount"); var b=marginCallCalc(m,"Hermione");
+  var sol=[{sub:"a)"}].concat(a.blocks).concat([{sub:"b)"}]).concat(b.blocks);
+  return {
+    topic:"Margin", section:"Margin Problems", pnum:"Problem 3",
+    problem:[
+      {p:"Hermione purchases "+m.shares+" shares at "+usd(m.price)+" per share using "+usd(m.own)+" of own money, borrowing the remainder of the purchase price from the prime broker. The rate on the margin loan is "+m.rate+"%. The maintenance margin is "+m.maint+"%."},
+      {p:"(a) What is the rate of return if the price of the stock goes up "+up+"% during the next year? The stock currently pays no dividend."},
+      {p:"(b) How low can the stock price fall before Hermione gets a margin call?"}
+    ],
+    solution:sol, answer:"(a) "+pct(a.ror)+"  (b) "+usd(b.P,2)
+  };
+}
+
+// ---- Limit Order Book ------------------------------------------------
+// Built to the course spec (LOB_Practice_Problem_Build_Spec.md): six events, limit and market
+// orders only, exactly one mechanic per problem (FIFO or Walk), every check asserted by the engine.
+function p2(x){ return x.toFixed(2); }
+function uniq(a){ return a.filter(function(x,i){ return a.indexOf(x)===i; }); }
+function simulateBook(orders){
+  var bids=[], asks=[], trades=[], unfilled=0, events=[], crossedLimit=false;
+  orders.forEach(function(o,idx){
+    var rem=o.size; var opp = o.side==="Buy"?asks:bids; var fills=[];
+    function crosses(p){ return o.price==="market" || (o.side==="Buy"? o.price>=p : o.price<=p); }
+    if(o.price!=="market" && opp.length && crosses(opp[0].price)) crossedLimit=true;   // marketable limit: out of scope
+    while(rem>0 && opp.length && crosses(opp[0].price)){
+      var r=opp[0]; var q=Math.min(rem,r.size);
+      var t={time:o.time, price:r.price, qty:q, buyer:o.side==="Buy"?o.trader:r.trader, seller:o.side==="Buy"?r.trader:o.trader,
+             aggressor:o.trader, resting:r.trader, restingBefore:r.size, restingLeft:r.size-q};
+      trades.push(t); fills.push(t); r.size-=q; rem-=q; if(r.size===0) opp.shift();
+    }
+    var rested=false;
+    if(rem>0){
+      if(o.price==="market"){ unfilled+=rem; }
+      else{
+        var own = o.side==="Buy"?bids:asks;
+        own.push({trader:o.trader,size:rem,price:o.price,seq:idx}); rested=true;
+        own.sort(function(a,b){ return (o.side==="Buy"? b.price-a.price : a.price-b.price) || (a.seq-b.seq); });
+      }
+    }
+    events.push({order:o, fills:fills, remaining:rem, rested:rested});
+  });
+  return {bids:bids, asks:asks, trades:trades, unfilled:unfilled, events:events, crossedLimit:crossedLimit};
+}
+// Which mechanic(s) a flow exercises. FIFO: one aggressive order fills two or more resting orders at the
+// same price and leaves the last one partially filled. Walk: one order prints at two or more prices.
+function classifyLOB(res){
+  var fifo=[], walk=[];
+  res.events.forEach(function(e){
+    var prices=uniq(e.fills.map(function(f){ return f.price; }));
+    if(prices.length>=2) walk.push(e);
+    prices.forEach(function(p){
+      var fs=e.fills.filter(function(f){ return f.price===p; });
+      if(fs.length>=2 && fs[fs.length-1].restingLeft>0) fifo.push({event:e, price:p, first:fs[0], last:fs[fs.length-1]});
+    });
+  });
+  return {fifo:fifo, walk:walk};
+}
+function bookKey(res){
+  return JSON.stringify({ b:res.bids.map(function(x){return [x.trader,x.size,x.price];}), a:res.asks.map(function(x){return [x.trader,x.size,x.price];}),
+                          t:res.trades.map(function(t){return [t.price,t.qty,t.buyer,t.seller];}) });
+}
+// Spec checks. Returns the mechanic name when every check passes, otherwise null.
+function lobValid(orders,res){
+  if(res.crossedLimit || res.unfilled>0) return null;                 // no marketable limits; market orders fully fill
+  if(!res.bids.length || !res.asks.length) return null;               // closes two-sided so the quote is answerable
+  if(res.trades.length<2 || res.trades.length>6) return null;         // fits the six-row tape
+  var c=classifyLOB(res);
+  var isFifo = c.fifo.length===1 && c.walk.length===0, isWalk = c.walk.length===1 && c.fifo.length===0;
+  if(!isFifo && !isWalk) return null;                                 // exactly one mechanic
+  if(isFifo){                                                         // swap the two queued arrivals: the answer must change
+    var f=c.fifo[0], i=-1, j=-1;
+    orders.forEach(function(o,k){ if(o.trader===f.first.resting) i=k; if(o.trader===f.last.resting) j=k; });
+    var sw=orders.map(function(o){ var c2={}; for(var k in o) c2[k]=o[k]; return c2; });
+    var ti=sw[i].time, tj=sw[j].time, tmp=sw[i]; sw[i]=sw[j]; sw[j]=tmp; sw[i].time=ti; sw[j].time=tj;
+    if(bookKey(simulateBook(sw))===bookKey(res)) return null;
+  }
+  var sub=function(s){ return orders.filter(function(o){return o.side===s;}).reduce(function(a,o){return a+o.size;},0); };
+  var traded=res.trades.reduce(function(a,t){return a+t.qty;},0);
+  var restB=res.bids.reduce(function(a,x){return a+x.size;},0), restA=res.asks.reduce(function(a,x){return a+x.size;},0);
+  if(sub("Buy")-traded!==restB || sub("Sell")-traded!==restA) return null;   // conservation, each side
+  return isFifo?"FIFO":"WALK";
+}
+// Skeleton for one problem: the core orders that create the mechanic, plus filler on the other side.
+function lobSkeleton(mech){
+  var L=RANGES.lob.ladder;
+  var rest=pick(["Buy","Sell"]), agg= rest==="Buy"?"Sell":"Buy"; var core;
+  if(mech==="FIFO"){
+    var p = rest==="Buy"? pick([20.00,20.05,20.10]) : pick([20.05,20.10,20.15]);
+    var a=rint(1,5), b=rint(2,6), cMax=Math.min(b-1,6-a); if(cMax<1) return null;
+    var c=rint(1,cMax);                                   // fills the first completely, clips the second, leaves b−c
+    core=[{side:rest,size:a,price:p},{side:rest,size:b,price:p},{side:agg,size:a+c,price:"market"}];
+  }else{
+    var levels = rest==="Buy"? [20.10,20.05,20.00] : [20.05,20.10,20.15];   // best level first
+    var n=pick([2,3]); var start=rint(0,levels.length-n); var lv=levels.slice(start,start+n);
+    var sizes=lv.map(function(){ return rint(1,6); }); var total=sizes.reduce(function(s,x){return s+x;},0);
+    if(sizes[0]>=Math.min(6,total)) return null;
+    var m=rint(sizes[0]+1, Math.min(6,total));            // strictly larger than the best level, fully fillable
+    core=shuffle(lv.map(function(p,i){ return {side:rest,size:sizes[i],price:p}; })).concat([{side:agg,size:m,price:"market"}]);
+  }
+  var others=[], usedMarket=false;
+  for(var i=core.length;i<6;i++){
+    if(!usedMarket && rng()<0.4){ usedMarket=true; others.push({side:rest,size:rint(1,4),price:"market"}); }
+    else others.push({side:agg,size:rint(1,6),price:pick(L)});
+  }
+  // Interleave: core keeps its internal order; filler takes the remaining slots.
+  var slots=shuffle([0,1,2,3,4,5]).slice(0,core.length).sort(function(a,b){return a-b;});
+  var seq=[], ci=0, oi=0;
+  for(var k=0;k<6;k++){ if(slots.indexOf(k)>=0) seq.push(core[ci++]); else seq.push(others[oi++]); }
+  return seq;
+}
+function lobWalkthrough(res){
+  return res.events.map(function(e){
+    var o=e.order; var verb= o.side==="Buy"?"buys":"sells";
+    var head=o.time+"  "+o.trader+" "+verb+" "+o.size+(o.price==="market"?" at market.":" @ "+p2(o.price)+".");
+    if(!e.fills.length){
+      var why = o.side==="Buy" ? "No offer at or below "+p2(o.price) : "No bid at or above "+p2(o.price);
+      return head+" "+why+", so the order rests on the "+(o.side==="Buy"?"bid":"offer")+" at "+p2(o.price)+".";
+    }
+    var parts=e.fills.map(function(f,i){
+      var s;
+      if(i===0) s="Best "+(o.side==="Buy"?"offer":"bid")+" is "+f.resting+" "+f.restingBefore+" @ "+p2(f.price)+": fills "+f.resting+" "+f.qty+" @ "+p2(f.price);
+      else if(f.price===e.fills[i-1].price) s="Next in the queue at "+p2(f.price)+" is "+f.resting+" "+f.restingBefore+": fills "+f.resting+" "+f.qty+" @ "+p2(f.price);
+      else s=p2(e.fills[i-1].price)+" is exhausted, so the order continues to "+p2(f.price)+" and fills "+f.resting+" "+f.qty+" @ "+p2(f.price);
+      if(f.restingLeft>0) s+=", leaving "+f.resting+" with "+f.restingLeft+" resting";
+      return s+".";
+    });
+    var tail = e.remaining===0 ? o.trader+" is completely filled." : o.trader+" has "+e.remaining+" left, which rests at "+p2(o.price)+".";
+    return head+" "+parts.join(" ")+" "+tail;
+  });
+}
+function listJoin(a){ return a.length<=2 ? a.join(" and ") : a.slice(0,-1).join(", ")+" and "+a[a.length-1]; }
+function lobMistake(c){
+  if(c.fifo.length){
+    var f=c.fifo[0], o=f.event.order;
+    return "Splitting "+o.trader+"'s fill between "+f.first.resting+" and "+f.last.resting+", or filling "+f.last.resting+" first. Both rest at "+p2(f.price)+" and "+f.first.resting+" arrived earlier, so time priority gives "+f.first.resting+" the complete fill and leaves "+f.last.resting+" holding the remaining "+f.last.restingLeft+".";
+  }
+  var e=c.walk[0], prices=uniq(e.fills.map(function(x){return x.price;})).map(p2);
+  return "Printing "+e.order.trader+"'s market order at a single price. The best level ("+prices[0]+") does not have enough size, so the order continues into the next level and prints separately at "+listJoin(prices)+".";
+}
+function genLOB(){
+  var R=RANGES.lob, orders, res, mech=null, guard=0, want=pick(["FIFO","WALK"]);   // even draw between the two mechanics
+  while(mech!==want && guard++<20000){
+    var sk=lobSkeleton(want); if(!sk) continue;
+    var names=shuffle(R.names).slice(0,6); var sorted=names.slice().sort();
+    if(names.join()===sorted.join() || names.join()===sorted.reverse().join()) continue;   // arrival order must not be alphabetical
+    var t=0;
+    orders=sk.map(function(o,i){ if(i>0) t+=rint(3,4); return {time:"10."+(t<10?"0"+t:t), trader:names[i], side:o.side, size:o.size, price:o.price}; });
+    res=simulateBook(orders); mech=lobValid(orders,res);
+  }
+  var ladder=RANGES.lob.ladder;
+  var rows=ladder.map(function(p){
+    var a=res.asks.filter(function(x){return x.price===p;}); var b=res.bids.filter(function(x){return x.price===p;});
+    return {price:p, traders:a.concat(b).map(function(x){return x.trader;}), sell:a.map(function(x){return x.size;}), buy:b.map(function(x){return x.size;})};
+  });
+  var bestBid=res.bids[0], bestAsk=res.asks[0];
+  var bidSize=res.bids.filter(function(x){return x.price===bestBid.price;}).reduce(function(s,x){return s+x.size;},0);
+  var askSize=res.asks.filter(function(x){return x.price===bestAsk.price;}).reduce(function(s,x){return s+x.size;},0);
+  var sumSide=function(side){ return orders.filter(function(o){return o.side===side;}); };
+  var buys=sumSide("Buy"), sells=sumSide("Sell");
+  var tot=function(arr){return arr.reduce(function(s,o){return s+o.size;},0);};
+  var list=function(arr){return arr.map(function(o){return o.trader+" "+o.size;}).join(", ");};
+  var traded=res.trades.reduce(function(s,t){return s+t.qty;},0);
+  var restBuy=res.bids.reduce(function(s,x){return s+x.size;},0), restSell=res.asks.reduce(function(s,x){return s+x.size;},0);
+  var buyFirst = orders[0].side==="Buy";
+  var recon="Trades printed: "+res.trades.length+". "+
+    (buyFirst
+      ? "Buy orders submitted "+tot(buys)+" ("+list(buys)+"); sell orders submitted "+tot(sells)+" ("+list(sells)+")."
+      : "Sell orders submitted "+tot(sells)+" ("+list(sells)+"); buy orders submitted "+tot(buys)+" ("+list(buys)+").")+
+    " Shares traded "+traded+". Resting at the close: "+
+    (buyFirst ? restBuy+" to buy, "+restSell+" to sell." : restSell+" to sell, "+restBuy+" to buy.")+" Both sides reconcile.";
+  var conservation="Buy side: "+tot(buys)+" submitted − "+traded+" traded = "+restBuy+" resting. Sell side: "+tot(sells)+" submitted − "+traded+" traded = "+restSell+" resting.";
+  var cls=classifyLOB(res);
+  return {
+    topic:"Limit Order Book", section:"Limit Order Book Problems", pnum:"",
+    lob:{orders:orders, rows:rows, quote:{bid:bestBid.price, bidSize:bidSize, ask:bestAsk.price, askSize:askSize}, trades:res.trades,
+         recon:recon, conservation:conservation, mechanic:mech, walkthrough:lobWalkthrough(res), mistake:lobMistake(cls)},
+    answer:"Bid "+bestBid.price.toFixed(2)+" × "+bidSize+", Ask "+bestAsk.price.toFixed(2)+" × "+askSize+", "+res.trades.length+" trades"
+  };
+}
+
+// One entry per handout template. `num` is the handout's problem number, `desc` is the picker label.
+var TEMPLATES=[
+  {id:"ret",   topic:"Return",           short:"Return",     num:"1–2", desc:"Mean and holding-period returns", gen:genReturn},
+  {id:"cal",   topic:"Portfolio Theory", short:"Portfolio",  num:"1",   desc:"CAL slope",                       gen:genCAL},
+  {id:"alloc", topic:"Portfolio Theory", short:"Portfolio",  num:"2",   desc:"Allocation for a target σ",       gen:genAlloc},
+  {id:"util",  topic:"Portfolio Theory", short:"Portfolio",  num:"3",   desc:"Range of A",                      gen:genUtility},
+  {id:"hedge", topic:"Portfolio Theory", short:"Portfolio",  num:"4",   desc:"Risk-free hedge, ρ = −1",         gen:genHedge},
+  {id:"mcall", topic:"Margin",           short:"Margin",     num:"1",   desc:"Margin call price",               gen:genMarginCall},
+  {id:"mret",  topic:"Margin",           short:"Margin",     num:"2",   desc:"Return on margin",                gen:genMarginReturn},
+  {id:"mboth", topic:"Margin",           short:"Margin",     num:"3",   desc:"Return and margin call",          gen:genMarginBoth},
+  {id:"lob",   topic:"Limit Order Book", short:"Order Book", num:"1–4", desc:"Limit order book",                gen:genLOB}
+];
+var TOPICS=["Return","Portfolio Theory","Margin","Limit Order Book"];
+function templateById(id){ for(var i=0;i<TEMPLATES.length;i++) if(TEMPLATES[i].id===id) return TEMPLATES[i]; return null; }
+// generate(topic, id): a specific template when id is given, otherwise a random template within the topic.
+function generate(topic, id){
+  var t = id ? templateById(id) : pick(TEMPLATES.filter(function(x){ return topic==="All" || x.topic===topic; }));
+  var P = t.gen(); P.id=t.id; P.desc=t.desc; return P;
+}
+</script>
+
+<script>
+// ============================================================
+//  UI
+// ============================================================
+var LOB_RULES=[
+  "Resting limit orders are ranked first by price priority: the best-priced order on each side (highest bid, lowest offer) trades first. Among orders at the same price, they are ranked by time priority on a first-in, first-out (FIFO) basis, so the order entered earlier trades first.",
+  "A market order executes immediately against the best available order(s) on the opposite side. If the best price does not have enough size, the order continues into the next price level.",
+  "A marketable limit order (a limit order priced to cross the best order on the other side) executes at the price of the resting order it matches.",
+  "A Cancel removes that trader's outstanding (unfilled) order from the book."
+];
+var state={topic:"All", template:null, current:null, n:0, lobSeen:false};
+try{
+  var saved=localStorage.getItem("fina6216-topic"); if(saved && (saved==="All"||TOPICS.indexOf(saved)>=0)) state.topic=saved;
+  var savedT=localStorage.getItem("fina6216-template"); if(savedT && templateById(savedT) && (state.topic==="All"||templateById(savedT).topic===state.topic)) state.template=savedT;
+}catch(e){}
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function h(tag,attrs,children){
+  var el=document.createElement(tag);
+  if(attrs) Object.keys(attrs).forEach(function(k){ if(k==="html") el.innerHTML=attrs[k]; else if(k==="text") el.textContent=attrs[k]; else el.setAttribute(k,attrs[k]); });
+  (children||[]).forEach(function(c){ if(c!=null) el.appendChild(typeof c==="string"?document.createTextNode(c):c); });
+  return el;
+}
+
+function renderBlocks(blocks, container){
+  blocks.forEach(function(b){
+    if(b.sub){ container.appendChild(h("div",{class:"sub",text:b.sub})); return; }
+    if(b.p!==undefined){
+      var p=h("p",b.html?{html:b.p}:{text:b.p});
+      if(b.blank){ p.appendChild(h("span",{class:"blank"})); p.appendChild(document.createTextNode(".")); }
+      container.appendChild(p); return;
+    }
+    if(b.ul){ container.appendChild(h("ul",null,b.ul.map(function(li){return h("li",{text:li});}))); return; }
+    if(b.calc){
+      var pre=h("div",{class:"calc"+(b.flush?" flush":"")+(b.final?" final":"")});
+      pre.textContent=b.calc.join("\n"); container.appendChild(pre); return;
+    }
+    if(b.table==="asset"){
+      var t=h("table",{class:"asset"});
+      t.appendChild(h("thead",null,[h("tr",null,b.head.map(function(x){return h("th",{text:x});}))]));
+      t.appendChild(h("tbody",null,b.rows.map(function(r){return h("tr",null,r.map(function(c){return h("td",{text:c});}));})));
+      container.appendChild(h("div",{class:"tbl-wrap"},[t])); return;
+    }
+  });
+}
+
+function money2(p){ return p.toFixed(2); }
+function lobSheet(L, filled){
+  var box=h("div",{class:"lob"});
+  box.appendChild(h("p",{class:"lob-title",text:"State of the Limit Order Book"+(filled?" at 10.30 am":"")}));
+  var book=h("table",{class:"book"});
+  book.appendChild(h("thead",null,[h("tr",null,["Trader Queue","Sell size","Order price","Buy size"].map(function(x){return h("th",{text:x});}))]));
+  book.appendChild(h("tbody",null,L.rows.map(function(r){
+    return h("tr",null,[
+      h("td",{text: filled? r.traders.join("\n"):""}),
+      h("td",{text: filled? r.sell.join("\n"):""}),
+      h("td",{text: money2(r.price)}),
+      h("td",{text: filled? r.buy.join("\n"):""})
+    ]);
+  })));
+  box.appendChild(h("div",{class:"tbl-wrap"},[book]));
+  var q=h("table",{class:"quote"});
+  q.appendChild(h("thead",null,[h("tr",null,[h("th",{text:""}),h("th",{text:"Quote ($)"}),h("th",{text:"Size"})])]));
+  q.appendChild(h("tbody",null,[
+    h("tr",null,[h("td",{text:"Bid"}),h("td",{text:filled?money2(L.quote.bid):""}),h("td",{text:filled?String(L.quote.bidSize):""})]),
+    h("tr",null,[h("td",{text:"Ask"}),h("td",{text:filled?money2(L.quote.ask):""}),h("td",{text:filled?String(L.quote.askSize):""})])
+  ]));
+  box.appendChild(h("div",{class:"tbl-wrap",style:"display:flex;justify-content:center"},[q]));
+  box.appendChild(h("p",{class:"lob-title",text:"Trades reported on the Ticker Tape"}));
+  var tape=h("table",{class:"tape"});
+  tape.appendChild(h("thead",null,[h("tr",null,["Time","Price","Quantity","Buyer","Seller"].map(function(x){return h("th",{text:x});}))]));
+  var tb=h("tbody");
+  for(var i=0;i<6;i++){                 // six tape rows always, regardless of the true trade count
+    var t=filled?L.trades[i]:null;
+    tb.appendChild(h("tr",{class:"taperow"},(t?[t.time,money2(t.price),String(t.qty),t.buyer,t.seller]:["","","","",""]).map(function(c){return h("td",{text:c});})));
+  }
+  tape.appendChild(tb);
+  box.appendChild(h("div",{class:"tbl-wrap"},[tape]));
+  return box;
+}
+
+function renderProblem(P){
+  var c=document.getElementById("problem"); c.innerHTML="";
+  document.getElementById("secLabel").textContent=P.section;
+  document.getElementById("pnum").textContent=(P.pnum?P.pnum+" · ":"")+P.desc;
+  if(P.lob){
+    var d=h("details",{class:"rules"}); if(!state.lobSeen){ d.open=true; state.lobSeen=true; }
+    d.appendChild(h("summary",{text:"Market rules and what to do"}));
+    d.appendChild(h("p",{text:"Assume a simple, price-time priority limit order book. Complex order types, such as hidden orders, and the secondary priority rules used in real markets are outside its scope."}));
+    d.appendChild(h("ul",null,LOB_RULES.map(function(r){return h("li",{text:r});})));
+    d.appendChild(h("p",{text:"Fill in the answer sheet: the state of the book after all six orders have been processed, the quote that results from it, and every trade printed on the ticker tape. List traders in the Trader Queue column in the order they arrived, and show the size that is still resting, not the size originally submitted. Prices are in dollars. The ladder is 20.15, 20.10, 20.05 and 20.00."}));
+    c.appendChild(d);
+    c.appendChild(h("p",{text:"The market receives the following order flow for a stock (list is ordered chronologically)."}));
+    var t=h("table",{class:"flow"});
+    t.appendChild(h("thead",null,[h("tr",null,["Time","Trader","Order Side","Size","Price"].map(function(x){return h("th",{text:x});}))]));
+    t.appendChild(h("tbody",null,P.lob.orders.map(function(o){
+      return h("tr",null,[h("td",{text:o.time}),h("td",{class:"tr",text:o.trader}),h("td",{text:o.side}),h("td",{text:String(o.size)}),h("td",{text:o.price==="market"?"market":money2(o.price)})]);
+    })));
+    c.appendChild(h("div",{class:"tbl-wrap"},[t]));
+    c.appendChild(lobSheet(P.lob,false));
+  }else{
+    renderBlocks(P.problem,c);
+  }
+}
+function renderSolution(P){
+  var s=document.getElementById("solution"); s.innerHTML="";
+  s.appendChild(h("p",{class:"stitle",text:"Solution"}));
+  if(P.lob){
+    s.appendChild(h("p",{text:"Sizes shown in the book are the quantities still resting after all six orders have been processed."}));
+    s.appendChild(lobSheet(P.lob,true));
+    s.appendChild(h("div",{class:"sub",text:"Event-by-event walk-through"}));
+    s.appendChild(h("ol",{class:"walk"},P.lob.walkthrough.map(function(line){ return h("li",{text:line}); })));
+    s.appendChild(h("div",{class:"sub",text:"What this problem is built to catch"}));
+    s.appendChild(h("p",{class:"recon",text:P.lob.mistake}));
+    s.appendChild(h("div",{class:"sub",text:"Conservation check"}));
+    s.appendChild(h("p",{class:"recon",text:P.lob.recon}));
+    s.appendChild(h("p",{class:"recon",text:P.lob.conservation}));
+  }else{
+    renderBlocks(P.solution,s);
+  }
+  s.hidden=false;
+}
+
+function load(P){
+  state.current=P; state.n++;
+  document.getElementById("solution").hidden=true;
+  document.getElementById("btnShow").hidden=false;
+  renderProblem(P);
+  document.getElementById("count").textContent="Problem "+state.n+" this session";
+  var top=document.getElementById("sheet").getBoundingClientRect().top;
+  if(top<0) window.scrollTo({top:0,behavior:"auto"});
+}
+// Next: the pinned template if one is chosen, otherwise a random template within the topic.
+function next(){ load(generate(state.topic, state.template)); }
+// Similar: the same template as the problem on screen, with new numbers.
+function similar(){ load(generate(state.topic, state.current.id)); }
+function show(){
+  renderSolution(state.current);
+  document.getElementById("btnShow").hidden=true;
+}
+
+var topicsEl=document.getElementById("topics"), pickerEl=document.getElementById("picker");
+function setPressed(container, isOn){ Array.prototype.forEach.call(container.children,function(x){ x.setAttribute("aria-pressed",String(isOn(x))); }); }
+function renderPicker(){
+  pickerEl.innerHTML="";
+  var any=h("button",{class:"chip sub",type:"button",text: state.topic==="All"?"Any problem":"Any in "+state.topic,"aria-pressed":String(state.template===null)});
+  any.addEventListener("click",function(){ setTemplate(null); });
+  pickerEl.appendChild(any);
+  TEMPLATES.filter(function(t){ return state.topic==="All" || t.topic===state.topic; }).forEach(function(t){
+    var label = state.topic==="All" ? t.short+" "+t.num : t.num+" · "+t.desc;
+    var b=h("button",{class:"chip sub",type:"button",text:label,title:t.topic+" — Problem "+t.num+": "+t.desc,"data-id":t.id,"aria-pressed":String(t.id===state.template)});
+    b.addEventListener("click",function(){ setTemplate(t.id); });
+    pickerEl.appendChild(b);
+  });
+  document.getElementById("btnNext").hidden = state.template!==null;   // pinned: "similar" and "next" would be identical
+}
+function setTemplate(id){
+  state.template=id; try{ if(id) localStorage.setItem("fina6216-template",id); else localStorage.removeItem("fina6216-template"); }catch(e){}
+  setPressed(pickerEl,function(x){ return (x.getAttribute("data-id")||null)===id; });
+  document.getElementById("btnNext").hidden = id!==null;
+  next();
+}
+["All"].concat(TOPICS).forEach(function(t){
+  var b=h("button",{class:"chip",type:"button",text:t,"aria-pressed":String(t===state.topic)});
+  b.addEventListener("click",function(){
+    state.topic=t; try{localStorage.setItem("fina6216-topic",t);}catch(e){}
+    setPressed(topicsEl,function(x){ return x.textContent===t; });
+    if(state.template && t!=="All" && templateById(state.template).topic!==t){ state.template=null; try{localStorage.removeItem("fina6216-template");}catch(e){} }
+    renderPicker(); next();
+  });
+  topicsEl.appendChild(b);
+});
+renderPicker();
+document.getElementById("btnShow").addEventListener("click",show);
+document.getElementById("btnSimilar").addEventListener("click",similar);
+document.getElementById("btnNext").addEventListener("click",next);
+document.addEventListener("keydown",function(e){
+  if(e.target.tagName==="BUTTON"||e.target.tagName==="SUMMARY") return;
+  if(e.key==="s"||e.key==="S"){ if(!document.getElementById("btnShow").hidden) show(); }
+  if(e.key==="n"||e.key==="N") next();
+  if(e.key==="r"||e.key==="R") similar();
+});
+
+var ranges=[
+  "Return: 100–500 shares; starting price $20–$60; whole-dollar price moves of +$2 to +$10 in three years and −$2 to −$6 in one year.",
+  "CAL slope and allocation: risk-free rate 2%–7%; risky expected return 4–10 points above it; σ from 10%–25%; target σ chosen so the weight in P is a whole percent.",
+  "Range of A: expected return 8%–14%; σ 10%–25%; risk-free 2%–7%; utility in percent form U = E(R) – 0.005·A·σ²; A must come out greater than 0.",
+  "Perfect hedge: σ pairs from 10%–30%; expected returns 3%–12% with the riskier asset earning more.",
+  "Margin: shares 100–1,000; price $20–$100 in $5 steps; own money 50%–70% of the position, rounded to $500 or $1,000; loan rate 5%–9%; maintenance 25%–40%; price rise 10%–30%.",
+  "Limit order book: six events, sizes 1–6, times 10.00–10.20, ladder fixed at 20.15 / 20.10 / 20.05 / 20.00. Limit and market orders only, no marketable limits. Each problem tests exactly one mechanic, FIFO time priority or a market order walking the book, and the engine verifies the mechanic changes the answer. Trader names never arrive in alphabetical order. Market orders fully fill, the book closes with a bid and an offer, and each side reconciles."
+];
+document.getElementById("rangesList").innerHTML=ranges.map(function(r){return "<li>"+esc(r)+"</li>";}).join("");
+
+next();
+</script>
+
+</body>
+</html>
